@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio.bzh</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        :root {
+            --bg: #0a0a0a;
+            --text: #e0e0e0;
+            --accent: #00ff9d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Press Start 2P', system-ui;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Vidéo centrale */
+        .video-container {
+            width: 180px;
+            height: 180px;
+            margin-bottom: 60px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 25px rgba(0, 255, 157, 0.3);
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            image-rendering: pixelated; /* garde un look un peu rétro si la vidéo est pixel-art */
+        }
+
+        .content {
+            text-align: center;
+            z-index: 2;
+        }
+
+        h1 {
+            font-size: 1.9rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+            text-shadow: 0 0 12px var(--accent);
+            letter-spacing: 5px;
+        }
+
+        .subtitle {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            opacity: 0.9;
+            margin-bottom: 90px;
+        }
+
+        /* Lien Instagram */
+        .insta-link {
+            position: absolute;
+            bottom: 40px;
+            color: #c0c0c0;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .insta-link:hover {
+            color: #e1306c;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Vidéo 8-bit / pixel au centre -->
+    <div class="video-container">
+        <video autoplay loop muted playsinline>
+            <source src="https://i.imgur.com/Z8CUvQL.mp4" type="video/mp4">
+            Votre navigateur ne supporte pas la lecture de cette vidéo.
+        </video>
+    </div>
+
+    <div class="content">
+        <h1>STUDIO.BZH</h1>
+        <p class="subtitle">Création en cours ...</p>
+    </div>
+
+    <a href="https://www.instagram.com/nextation.app" 
+       target="_blank" 
+       class="insta-link">
+        Suivez-nous sur Instagram → @nextation.app
+    </a>
+
+</body>
+</html>
