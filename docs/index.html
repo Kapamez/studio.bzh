@@ -4,15 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Studio.bzh</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
-        :root {
-            --bg: #0a0a0a;
-            --text: #e0e0e0;
-            --accent: #00ff9d;
-        }
-
         * {
             margin: 0;
             padding: 0;
@@ -20,88 +13,172 @@
         }
 
         body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Press Start 2P', system-ui;
+            font-family: 'Inter', sans-serif;
+            background: #ffffff;
+            color: #1a2744;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero {
+            position: relative;
+            width: 100%;
             height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .video-container {
-            width: 180px;
-            height: 180px;
-            margin-bottom: 60px;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 0 25px rgba(0, 255, 157, 0.3);
-        }
-
-        .video-container video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            image-rendering: pixelated;
-        }
-
-        .content {
             text-align: center;
+            padding: 2rem;
+        }
+
+        .hero__video-wrapper {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .hero__video-wrapper iframe {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100vw;
+            height: 100vh;
+            transform: translate(-50%, -50%);
+            min-width: 177.77vh;
+            min-height: 56.25vw;
+            border: none;
+            opacity: 0.6;
+        }
+
+        .hero__overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                180deg,
+                rgba(255,255,255,0.3) 0%,
+                rgba(255,255,255,0.1) 50%,
+                rgba(255,255,255,0.5) 100%
+            );
+            z-index: 1;
+        }
+
+        .hero__content {
+            position: relative;
             z-index: 2;
         }
 
-        h1 {
-            font-size: 1.9rem;
-            margin-bottom: 20px;
-            color: var(--accent);
-            text-shadow: 0 0 12px var(--accent);
-            letter-spacing: 5px;
+        .hero__title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 10vw, 7rem);
+            font-weight: 500;
+            color: #1a2744;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
         }
 
-        .subtitle {
-            font-size: 1.05rem;
-            line-height: 1.6;
-            opacity: 0.9;
-            margin-bottom: 90px;
+        .hero__title .dot {
+            color: #c45c26;
         }
 
-        .insta-link {
-            position: absolute;
-            bottom: 40px;
-            color: #c0c0c0;
+        .hero__tagline {
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            font-weight: 300;
+            color: #1a2744;
+            opacity: 0.7;
+            margin-bottom: 2rem;
+            letter-spacing: 0.05em;
+        }
+
+        .hero__link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #c45c26;
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            padding: 0.75rem 1.5rem;
+            border: 1px solid rgba(196, 92, 38, 0.3);
+            border-radius: 100px;
             transition: all 0.3s ease;
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(10px);
         }
 
-        .insta-link:hover {
-            color: #e1306c;
-            transform: scale(1.05);
+        .hero__link:hover {
+            background: #c45c26;
+            color: #ffffff;
+            border-color: #c45c26;
+            transform: translateY(-2px);
+        }
+
+        .hero__link svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .hero__soon {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.7rem;
+            color: #1a2744;
+            opacity: 0.5;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .hero__soon svg {
+            width: 14px;
+            height: 14px;
+            opacity: 0.6;
         }
     </style>
 </head>
 <body>
+    <div class="hero">
+        <div class="hero__video-wrapper">
+            <iframe 
+                src="https://player.vimeo.com/video/1190288514?badge=0&autopause=0&autoplay=1&muted=1&loop=1&background=1&controls=0&title=0&byline=0&portrait=0" 
+                allow="autoplay; fullscreen" 
+                referrerpolicy="strict-origin-when-cross-origin">
+            </iframe>
+        </div>
+        <div class="hero__overlay"></div>
 
-    <div class="video-container">
-        <video autoplay loop muted playsinline>
-            <source src="https://i.imgur.com/Z8CUvQL.mp4" type="video/mp4">
-            Votre navigateur ne supporte pas la lecture de cette vidéo.
-        </video>
+        <div class="hero__content">
+            <h1 class="hero__title">Studio<span class="dot">.</span>bzh</h1>
+            <p class="hero__tagline">Made in BZH.</p>
+            <a href="https://instagram.com/nextation.app" target="_blank" rel="noopener" class="hero__link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="2" width="20" height="20" rx="5"/>
+                    <circle cx="12" cy="12" r="5"/>
+                    <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/>
+                </svg>
+                @nextation.app — Horaires de trains, simplifiés
+            </a>
+        </div>
+
+        <div class="hero__soon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/>
+            </svg>
+            Bientôt sur le Google Play Store
+        </div>
     </div>
-
-    <div class="content">
-        <h1>STUDIO.BZH</h1>
-        <p class="subtitle">Création en cours ...</p>
-    </div>
-
-    <a href="https://www.instagram.com/nextation.app" 
-       target="_blank" 
-       class="insta-link">
-        Suivez-nous sur Instagram → @nextation.app
-    </a>
-
 </body>
 </html>
