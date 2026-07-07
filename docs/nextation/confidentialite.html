@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Politique de confidentialité — Nextation</title>
+<meta name="description" content="Politique de confidentialité RGPD de l'application Nextation : données collectées, bases légales, conservation et droits des utilisateurs.">
+<link rel="stylesheet" href="legal.css">
+</head>
+<body>
+
+<div class="board">
+  <div class="board-inner">
+    <a class="board-brand" href="mentions-legales.html">Nextation</a>
+    <nav class="board-nav">
+      <a href="mentions-legales.html">Mentions légales</a>
+      <a href="confidentialite.html" aria-current="page">Confidentialité</a>
+      <a href="cgu.html">CGU</a>
+    </nav>
+  </div>
+</div>
+
+<main>
+  <header class="doc-header">
+    <p class="doc-eyebrow">Document légal 2 / 3</p>
+    <h1>Politique de confidentialité</h1>
+    <p class="doc-meta">Dernière mise à jour : 7 juillet 2026 · Conforme RGPD</p>
+  </header>
+
+  <section>
+    <h2><span class="num">01</span>Bases légales et finalités</h2>
+    <table>
+      <caption>Article 6 RGPD</caption>
+      <thead>
+        <tr>
+          <th>Finalité</th>
+          <th>Données concernées</th>
+          <th>Base légale</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Service d'alertes</td>
+          <td>Token FCM &amp; Données de Transport</td>
+          <td><strong>Consentement</strong> (activation volontaire)</td>
+        </tr>
+        <tr>
+          <td>Sécurité (App Check)</td>
+          <td>Jetons d'intégrité technique</td>
+          <td><strong>Intérêt légitime</strong> (protection du service)</td>
+        </tr>
+        <tr>
+          <td>Diagnostics techniques</td>
+          <td>Rapports pseudonymisés (Crashlytics)</td>
+          <td><strong>Intérêt légitime</strong> (stabilité de l'application)</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2><span class="num">02</span>Traitement et confidentialité</h2>
+    <p><strong>Localisation des traitements</strong> — Conformément au principe de transparence, l'Utilisateur est informé que si le stockage des données est maintenu en France (Paris), l'exécution technique des calculs et de la logique de l'API est effectuée sur des infrastructures situées en Belgique et en France.</p>
+    <p><strong>Minimisation</strong> — Aucune donnée d'identité civile ou GPS n'est collectée. Le partage des données avec les services tiers de Google a été désactivé dans la configuration du projet, sous réserve des traitements techniques nécessaires au fonctionnement des services Firebase utilisés.</p>
+    <p><strong>Firebase Crashlytics</strong> — Collecte des identifiants d'instance pseudonymisés et des métadonnées système (marque et modèle d'appareil, orientation de l'écran, utilisation de la mémoire vive, version de l'OS) pour analyser les plantages. Les données collectées par Crashlytics ne sont pas croisées avec d'autres services Google et sont utilisées uniquement pour améliorer la stabilité de l'application. Ces données ne permettent pas d'identifier directement l'Utilisateur.</p>
+    <p><strong>Stockage local</strong> — Vos favoris sont stockés exclusivement sur votre appareil via <em>Jetpack DataStore</em>.</p>
+  </section>
+
+  <section>
+    <h2><span class="num">03</span>Conservation et rétention</h2>
+    <div class="callout">
+      Les <strong>Données de Transport</strong> et le <strong>Token FCM</strong> sont automatiquement et définitivement supprimés du Backend <strong>30 heures après la date du trajet</strong>. Aucune archive n'est conservée.
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">04</span>Vos droits</h2>
+    <p>Conformément aux articles 15 à 22 du RGPD, vous disposez des droits d'accès, de rectification, d'effacement et d'opposition.</p>
+    <ul>
+      <li><strong>Portabilité (art. 20) :</strong> compte tenu de la nature des données traitées, de leur caractère éphémère (30h) et de l'absence d'identification nominative, ce droit est limité en pratique.</li>
+    </ul>
+    <h3>Exercice des droits</h3>
+    <ul>
+      <li><strong>Accès :</strong> vous pouvez retrouver votre Token FCM dans <span class="code">Paramètres → Informations techniques</span> de l'application.</li>
+      <li><strong>Effacement :</strong> s'effectue par la suppression de l'alerte ou la désinstallation de l'application.</li>
+      <li><strong>Contact :</strong> <a href="mailto:support@studio.bzh">support@studio.bzh</a>. Si vous ne disposez plus de votre Token FCM, nous ferons nos meilleurs efforts pour traiter votre demande via d'autres éléments techniques si possible. Toute demande sera traitée dans un délai maximal de 30 jours. Pour les demandes complexes, ce délai pourra être prolongé de 2 mois, avec information préalable de l'Utilisateur dans le délai initial d'un mois.</li>
+    </ul>
+  </section>
+</main>
+
+<footer>
+  <p>Nextation — <a href="mentions-legales.html">Mentions légales</a> · <a href="confidentialite.html">Confidentialité</a> · <a href="cgu.html">CGU</a></p>
+</footer>
+
+</body>
+</html>
