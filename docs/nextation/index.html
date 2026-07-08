@@ -30,9 +30,11 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
 body {
   margin: 0;
+  max-width: 100%;
+  overflow-x: hidden;
   background: var(--bg);
   color: var(--ink);
   font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -84,7 +86,8 @@ img, svg { max-width: 100%; display: block; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 .brand {
   font-family: 'Racing Sans One', sans-serif;
@@ -104,7 +107,8 @@ img, svg { max-width: 100%; display: block; }
 }
 .nav-links {
   display: flex;
-  gap: 4px;
+  flex-wrap: wrap;
+  gap: 2px;
   font-family: 'IBM Plex Mono', monospace;
   font-size: 0.78rem;
   text-transform: uppercase;
@@ -233,7 +237,7 @@ img, svg { max-width: 100%; display: block; }
   color: #fff;
   line-height: 1.1;
 }
-.widget-mid { flex: 1; min-width: 0; }
+.widget-mid { flex: 1; min-width: 0; overflow: hidden; }
 .train-pill {
   display: inline-block;
   background: rgba(255,255,255,0.08);
@@ -248,8 +252,10 @@ img, svg { max-width: 100%; display: block; }
 }
 .widget-time {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
-  gap: 6px;
+  row-gap: 2px;
+  column-gap: 6px;
   margin-bottom: 4px;
 }
 .widget-time .time-theo {
@@ -431,8 +437,14 @@ h2.display {
 
 /* ---------- COMPARISON ---------- */
 .compare { background: var(--bg); }
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 10px;
+}
 table.compare-table {
   width: 100%;
+  min-width: 640px;
   border-collapse: collapse;
   background: var(--surface);
   border-radius: 10px;
@@ -496,7 +508,22 @@ footer {
 @media (max-width: 520px) {
   .feat-grid { grid-template-columns: 1fr; }
   section { padding: 60px 0; }
-  .flap-row { flex-wrap: wrap; }
+  .widget { padding: 18px 16px 20px; }
+  .widget-body { gap: 10px; }
+  .widget-voie { padding: 6px 10px; }
+  .widget-voie .voie-value { font-size: 1.5rem; }
+  .train-pill { font-size: 0.68rem; }
+  .widget-time .time-theo { font-size: 0.95rem; }
+  .widget-time .time-est { font-size: 1.05rem; }
+  .widget-time .time-delay { font-size: 0.7rem; }
+  .widget-direction {
+    font-size: 0.78rem;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .widget-side { gap: 6px; }
 }
 </style>
 </head>
@@ -634,6 +661,7 @@ footer {
       <h2 class="display">Un train, pas un panneau entier</h2>
       <p>Les écrans en gare, Ma Gare et SNCF Connect font bien leur travail : tout montrer, pour toute la gare. Nextation fait l'inverse.</p>
     </div>
+    <div class="table-scroll">
     <table class="compare-table">
       <thead>
         <tr>
@@ -668,6 +696,7 @@ footer {
         </tr>
       </tbody>
     </table>
+    </div>
   </div>
 </section>
 
