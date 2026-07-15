@@ -1,728 +1,124 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nextation — Le prochain train, rien que lui</title>
-<meta name="description" content="Nextation affiche l'horaire, la voie et le retard du train que vous prenez vraiment, directement sur le widget Android de votre écran d'accueil.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Racing+Sans+One&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio.bzh</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon_32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon_16.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-:root {
-  --navy: #00305E;
-  --navy-container: #D6E4F0;
-  --secondary: #4A6572;
-  --accent: #E86B35;
-  --accent-container: #FFDBCF;
-  --bg: #F8F9FA;
-  --surface: #FFFFFF;
-  --surface-variant: #EBEBEB;
-  --ink: #1C2530;
-  --ink-muted: #4A6572;
-  --line: #DEE2E8;
+        html, body {
+            width: 100%;
+            overflow-x: hidden; /* évite tout débordement horizontal, quel que soit le contenu */
+        }
 
-  --night-bg: #121212;
-  --night-surface: #1E1E1E;
-  --night-surface-variant: #2D2D2D;
-  --night-blue: #66A1D2;
-  --night-accent: #FF8B58;
-}
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #1a2744;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
 
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; overflow-x: hidden; }
-body {
-  margin: 0;
-  max-width: 100%;
-  overflow-x: hidden;
-  background: var(--bg);
-  color: var(--ink);
-  font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 16px;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-}
-a { color: inherit; }
-a:focus-visible, button:focus-visible {
-  outline: 2px solid var(--night-blue);
-  outline-offset: 3px;
-}
-img, svg { max-width: 100%; display: block; }
-.wrap {
-  max-width: 1040px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-.display {
-  font-family: 'Racing Sans One', sans-serif;
-  font-weight: 400;
-  letter-spacing: 0.01em;
-}
-.mono {
-  font-family: 'IBM Plex Mono', monospace;
-  font-variant-numeric: tabular-nums;
-}
-.eyebrow {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--accent);
-  margin: 0 0 14px;
-}
+        .hero {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* Aligne le contenu à gauche */
+            justify-content: flex-start; /* Aligne vers le haut */
+            text-align: left; /* Aligne le texte à gauche */
+            padding: 15vh 8% 2rem 8%; /* Positionne le contenu environ aux 3/4 de la hauteur */
+            background: url('background_2.jpg') no-repeat center center/cover;
+        }
 
-/* ---------- NAV ---------- */
-.nav {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  background: var(--navy);
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-}
-.nav-inner {
-  max-width: 1040px;
-  margin: 0 auto;
-  padding: 14px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-.brand {
-  font-family: 'Racing Sans One', sans-serif;
-  font-size: 1.3rem;
-  color: #fff;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.brand::before {
-  content: "";
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--accent);
-}
-.nav-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-.nav-links a {
-  color: #C9D2E3;
-  text-decoration: none;
-  padding: 8px 12px;
-  border-radius: 3px;
-}
-.nav-links a:hover { color: #fff; background: rgba(255,255,255,0.08); }
+        .hero__content {
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
+            width: 100%;
+        }
 
-/* ---------- HERO (night platform) ---------- */
-.hero {
-  background: var(--night-bg);
-  color: #E7E9EC;
-  padding: 72px 0 90px;
-  overflow: hidden;
-}
-.hero-inner {
-  display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
-  gap: 56px;
-  align-items: center;
-}
-.hero h1 {
-  font-size: clamp(2.2rem, 4.2vw, 3.3rem);
-  line-height: 1.08;
-  margin: 0 0 20px;
-  color: #fff;
-}
-.hero h1 em {
-  font-style: normal;
-  color: var(--night-accent);
-}
-.hero p.lead {
-  font-size: 1.08rem;
-  color: #B7BFC9;
-  max-width: 46ch;
-  margin: 0 0 32px;
-}
-.cta-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 13px 22px;
-  border-radius: 6px;
-  font-weight: 600;
-  font-size: 0.95rem;
-  text-decoration: none;
-  border: 1px solid transparent;
-  cursor: pointer;
-}
-.btn-primary {
-  background: var(--night-accent);
-  color: #1A0D06;
-}
-.btn-primary:hover { background: #ffa176; }
-.btn-ghost {
-  color: #E7E9EC;
-  border-color: rgba(255,255,255,0.25);
-}
-.btn-ghost:hover { border-color: rgba(255,255,255,0.6); }
-.hero-note {
-  margin-top: 14px;
-  font-size: 0.82rem;
-  color: #7C8794;
-}
+        .hero__section-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #ffffff;
+            opacity: 0.65;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
 
-/* ---------- Split-flap widget mock ---------- */
-.widget {
-  background: var(--night-surface);
-  border-radius: 18px;
-  padding: 22px 22px 26px;
-  border: 1px solid rgba(255,255,255,0.06);
-  box-shadow: 0 30px 60px -20px rgba(0,0,0,0.6);
-}
-.widget-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-.widget-caption {
-  margin: 12px 4px 0;
-  font-size: 0.78rem;
-  color: #7C8794;
-  text-align: center;
-}
-.widget-title {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #8A93A0;
-}
-.widget-dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: #57D08A;
-  box-shadow: 0 0 0 3px rgba(87,208,138,0.18);
-}
-.widget-body {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-.widget-voie {
-  background: #004B87;
-  border-radius: 12px;
-  padding: 8px 16px;
-  text-align: center;
-  flex-shrink: 0;
-}
-.widget-voie .voie-label {
-  display: block;
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: #66A1D2;
-}
-.widget-voie .voie-value {
-  display: block;
-  font-size: 1.9rem;
-  font-weight: 700;
-  color: #fff;
-  line-height: 1.1;
-}
-.widget-mid { flex: 1; min-width: 0; overflow: hidden; }
-.train-pill {
-  display: inline-block;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.14);
-  border-radius: 6px;
-  padding: 2px 8px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.76rem;
-  font-weight: 600;
-  color: var(--night-accent);
-  margin-bottom: 6px;
-}
-.widget-time {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  row-gap: 2px;
-  column-gap: 6px;
-  margin-bottom: 4px;
-}
-.widget-time .time-theo {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 1.15rem;
-  color: #8A93A0;
-  text-decoration: line-through;
-}
-.widget-time .time-est {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #EF5350;
-}
-.widget-time .time-delay {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: #FF8A65;
-}
-.widget-direction { font-size: 0.85rem; color: #B7BFC9; }
-.widget-side {
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  align-self: stretch;
-  justify-content: space-between;
-}
-.refresh-icon {
-  color: #66A1D2;
-  font-size: 1.15rem;
-  line-height: 1;
-}
-.sync-time { font-size: 0.7rem; color: #8A93A0; }
-@keyframes flapIn {
-  0% { transform: rotateX(90deg); opacity: 0; }
-  60% { transform: rotateX(-8deg); opacity: 1; }
-  100% { transform: rotateX(0deg); opacity: 1; }
-}
-.voie-value, .time-est { transform-origin: 50% 50%; }
-.animate .voie-value, .animate .time-est { animation: flapIn 0.55s ease-out both; }
-@media (prefers-reduced-motion: reduce) {
-  .animate .voie-value, .animate .time-est { animation: none; }
-}
+        .hero__title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 10vw, 7rem);
+            font-weight: 500;
+            color: #ffffff; /* Uniquement du blanc */
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
 
-/* ---------- SECTIONS shared ---------- */
-section { padding: 84px 0; }
-.section-head { max-width: 60ch; margin-bottom: 48px; }
-h2.display {
-  font-size: clamp(1.6rem, 3vw, 2.1rem);
-  color: var(--navy);
-  margin: 0 0 14px;
-}
-.section-head p { color: var(--ink-muted); font-size: 1.02rem; margin: 0; }
+        .hero__title .dot {
+            color: #ffffff; /* Uniquement du blanc */
+        }
 
-/* ---------- GENESIS ---------- */
-.genesis {
-  background: var(--surface);
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-}
-.genesis-inner {
-  display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
-  gap: 48px;
-  align-items: start;
-}
-.note {
-  background: var(--accent-container);
-  border-radius: 4px;
-  padding: 26px 28px;
-  position: relative;
-  font-size: 1rem;
-  color: #4A2413;
-}
-.note::before {
-  content: "";
-  position: absolute;
-  top: -8px; left: 28px;
-  width: 22px; height: 22px;
-  background: var(--accent-container);
-  transform: rotate(45deg);
-}
-.note p { margin: 0 0 12px; }
-.note p:last-child { margin-bottom: 0; }
-.note .sig {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.8rem;
-  color: #7A4321;
-  margin-top: 16px;
-}
-.genesis-text p { margin: 0 0 16px; color: var(--ink); }
-.genesis-text strong { color: var(--navy); }
-.pill {
-  display: inline-block;
-  background: var(--surface-variant);
-  border-radius: 20px;
-  padding: 3px 12px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.82rem;
-}
+        .hero__tagline {
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            font-weight: 300;
+            color: #ffffff; /* Uniquement du blanc */
+            opacity: 0.8;
+            margin-bottom: 2rem;
+            letter-spacing: 0.05em;
+        }
 
-/* ---------- MODES ---------- */
-.modes { background: var(--bg); }
-.mode-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-}
-.mode-card {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 30px 28px;
-}
-.mode-num {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px; height: 30px;
-  border-radius: 6px;
-  background: var(--navy);
-  color: #fff;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.82rem;
-  margin-bottom: 16px;
-}
-.mode-card h3 {
-  font-family: 'Racing Sans One', sans-serif;
-  font-weight: 400;
-  font-size: 1.3rem;
-  color: var(--navy);
-  margin: 0 0 10px;
-}
-.mode-card p { color: var(--ink-muted); margin: 0 0 18px; font-size: 0.96rem; }
-.mode-example {
-  background: var(--bg);
-  border: 1px dashed var(--line);
-  border-radius: 6px;
-  padding: 14px 16px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.85rem;
-  color: var(--secondary);
-}
-.mode-example .arrow { color: var(--accent); font-weight: 600; }
+        .hero__link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff; /* Uniquement du blanc */
+            text-decoration: none;
+            font-size: clamp(0.7rem, 2.3vw, 0.85rem);
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            padding: 0.75rem 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.5); /* Bordure blanche semi-transparente */
+            border-radius: 100px;
+            transition: all 0.3s ease;
+            background: transparent; /* Bouton transparent */
+            max-width: 100%; /* ne dépasse jamais la largeur de l'écran */
+            width: fit-content;
+            text-align: center;
+            white-space: normal; /* le texte peut revenir à la ligne si besoin sur petit écran */
+        }
 
-/* ---------- FEATURES ---------- */
-.features { background: var(--surface); }
-.feat-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-}
-.feat-card {
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 22px;
-}
-.feat-tag {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.68rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--accent);
-  background: var(--accent-container);
-  display: inline-block;
-  padding: 3px 8px;
-  border-radius: 4px;
-  margin-bottom: 14px;
-}
-.feat-card h4 {
-  font-size: 1rem;
-  margin: 0 0 8px;
-  color: var(--navy);
-}
-.feat-card p { font-size: 0.88rem; color: var(--ink-muted); margin: 0; }
-
-/* ---------- COMPARISON ---------- */
-.compare { background: var(--bg); }
-.table-scroll {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  border-radius: 10px;
-}
-table.compare-table {
-  width: 100%;
-  min-width: 640px;
-  border-collapse: collapse;
-  background: var(--surface);
-  border-radius: 10px;
-  overflow: hidden;
-  border: 1px solid var(--line);
-}
-.compare-table th, .compare-table td {
-  padding: 16px 18px;
-  text-align: left;
-  border-bottom: 1px solid var(--line);
-  font-size: 0.92rem;
-}
-.compare-table thead th {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--ink-muted);
-  background: var(--surface-variant);
-}
-.compare-table th:first-child, .compare-table td:first-child { color: var(--ink-muted); }
-.compare-table td.yes { color: var(--navy); font-weight: 600; }
-.compare-table td.no { color: var(--ink-muted); }
-.compare-table tbody tr:last-child td { border-bottom: none; }
-.col-nextation { background: var(--navy-container); font-weight: 600; }
-
-/* ---------- CTA ---------- */
-.cta {
-  background: var(--navy);
-  color: #fff;
-  text-align: center;
-}
-.cta h2 { color: #fff; }
-.cta p { color: #C9D2E3; max-width: 46ch; margin: 0 auto 28px; }
-.cta .cta-row { justify-content: center; }
-
-/* ---------- FOOTER ---------- */
-footer {
-  background: var(--night-bg);
-  color: #8A93A0;
-  padding: 40px 0;
-  font-size: 0.85rem;
-}
-.footer-inner {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-.footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
-.footer-links a { text-decoration: none; color: #8A93A0; }
-.footer-links a:hover { color: #fff; }
-
-@media (max-width: 860px) {
-  .hero-inner, .genesis-inner { grid-template-columns: 1fr; }
-  .mode-grid { grid-template-columns: 1fr; }
-  .feat-grid { grid-template-columns: repeat(2, 1fr); }
-  .compare-table { font-size: 0.82rem; }
-}
-@media (max-width: 520px) {
-  .feat-grid { grid-template-columns: 1fr; }
-  section { padding: 60px 0; }
-  .widget { padding: 18px 16px 20px; }
-  .widget-body { gap: 10px; }
-  .widget-voie { padding: 6px 10px; }
-  .widget-voie .voie-value { font-size: 1.5rem; }
-  .train-pill { font-size: 0.68rem; }
-  .widget-time .time-theo { font-size: 0.95rem; }
-  .widget-time .time-est { font-size: 1.05rem; }
-  .widget-time .time-delay { font-size: 0.7rem; }
-  .widget-direction {
-    font-size: 0.78rem;
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .widget-side { gap: 6px; }
-}
-</style>
+        .hero__link:hover {
+            background: #ffffff;
+            color: #1a2744; /* Le texte passe sur la couleur de fond pour rester lisible */
+            border-color: #ffffff;
+            transform: translateY(-2px);
+        }
+    </style>
 </head>
 <body>
-
-<nav class="nav">
-  <div class="nav-inner">
-    <a class="brand" href="#top">Nextation</a>
-    <div class="nav-links">
-      <a href="#genesis">Pourquoi</a>
-      <a href="#modes">Fonctionnement</a>
-      <a href="#comparaison">Comparatif</a>
-      <a href="https://www.instagram.com/nextation.app" target="_blank" rel="noopener">Instagram</a>
-    </div>
-  </div>
-</nav>
-
-<header class="hero" id="top">
-  <div class="wrap hero-inner">
-    <div>
-      <p class="eyebrow">Widget Android</p>
-      <h1 class="display">Le prochain train.<br><em>Rien que lui.</em></h1>
-      <p class="lead">Nextation affiche l'horaire, la voie et le retard du train que vous prenez vraiment — directement sur votre écran d'accueil, sans ouvrir l'application ni éplucher le panneau des départs.</p>
-      <div class="cta-row">
-        <a class="btn btn-primary" href="#cta">Bientôt sur Google Play</a>
-        <a class="btn btn-ghost" href="#modes">Voir comment ça marche</a>
-      </div>
-      <p class="hero-note">Disponible uniquement sur Android, pour l'instant.</p>
-    </div>
-
-    <div class="widget animate" role="img" aria-label="Aperçu du widget Nextation : voie B, TGV 8612, départ théorique 7h54 estimé 7h58, retard de 4 minutes, direction Paris Montparnasse">
-      <div class="widget-head">
-        <span class="widget-title">Nextation</span>
-        <span class="widget-dot"></span>
-      </div>
-      <div class="widget-body">
-        <div class="widget-voie">
-          <span class="voie-label">Voie</span>
-          <span class="voie-value mono">2</span>
+    <div class="hero">
+        <div class="hero__content">
+            <h1 class="hero__title">Studio<span class="dot">.</span>bzh</h1>
+            <p class="hero__tagline">Made in BZH.</p>
+            <p class="hero__section-label">Réalisations :</p>
+            <a href="https://studio.bzh/nextation" rel="noopener" class="hero__link">
+                Nextation — Horaires de trains, simplifiés
+            </a>
         </div>
-        <div class="widget-mid">
-          <span class="train-pill">TGV 8540</span>
-          <div class="widget-time">
-            <span class="time-theo">15:46</span>
-            <span class="time-est">15:51</span>
-            <span class="time-delay">+5 min</span>
-          </div>
-          <span class="widget-direction">→ Paris Montparnasse Hall 1 & 2</span>
-        </div>
-        <div class="widget-side">
-          <span class="refresh-icon" aria-hidden="true">⟳</span>
-          <span class="sync-time mono">12:34</span>
-        </div>
-      </div>
     </div>
-    <p class="widget-caption">Widget réel, posé sur l'écran d'accueil — se met à jour tout seul. Visuel d'exemple.</p>
-  </div>
-</header>
-
-<section class="genesis" id="genesis">
-  <div class="wrap genesis-inner">
-    <div class="note">
-      <p>« En rentrant de la fac, je ne me rappelais jamais à quelle heure partait mon prochain train. Et pour la voie, il fallait aller lire l'écran en gare — pas franchement pratique. »</p>
-      <p>C'est de là qu'est né Nextation.</p>
-    </div>
-    <div class="genesis-text">
-      <p class="eyebrow">Pourquoi Nextation</p>
-      <p>Les écrans de gare affichent <strong>tous</strong> les départs. L'application Ma Gare, de Gares &amp; Connexions, fait la même chose : elle reprend l'intégralité du panneau d'affichage, sur votre téléphone. SNCF Connect propose lui aussi un widget — mais lui aussi couvre la gare entière, pas un train en particulier.</p>
-      <p>Le problème, c'est qu'on ne prend jamais « tous les trains ». On en prend un, ou un intervalle de deux ou trois, tous les jours. Le reste du panneau est du bruit.</p>
-      <p>Nextation ne montre que <strong>votre</strong> train : celui que vous avez enregistré, avec son horaire, sa voie et son retard, en un coup d'œil sur l'écran d'accueil. <span class="pill">Sans ouvrir l'appli</span></p>
-    </div>
-  </div>
-</section>
-
-<section class="modes" id="modes">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">Fonctionnement</p>
-      <h2 class="display">Deux façons d'enregistrer votre train</h2>
-      <p>Au choix, selon que votre horaire est fixe ou que vous avez une marge de manœuvre le matin.</p>
-    </div>
-    <div class="mode-grid">
-      <div class="mode-card">
-        <span class="mode-num">01</span>
-        <h3>Train fixe</h3>
-        <p>Vous prenez toujours le même train ? Enregistrez-le une bonne fois pour toutes. Nextation vous montre chaque jour son horaire, sa voie et son retard éventuel.</p>
-        <div class="mode-example">Train enregistré <span class="arrow">→</span> TGV 8612 · 07:58</div>
-      </div>
-      <div class="mode-card">
-        <span class="mode-num">02</span>
-        <h3>Plage horaire</h3>
-        <p>Vous partez « entre deux heures », pas à un horaire précis ? Définissez votre fenêtre de départ. Nextation trouve automatiquement le prochain train qui s'y trouve.</p>
-        <div class="mode-example">Plage 7h50 – 8h15 <span class="arrow">→</span> prochain train : 07:58, voie B</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="features">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">Sur le widget</p>
-      <h2 class="display">Quatre informations, aucune de trop</h2>
-      <p>Tout ce qu'il vous faut pour partir au bon moment, sans ouvrir l'application.</p>
-    </div>
-    <div class="feat-grid">
-      <div class="feat-card">
-        <span class="feat-tag">Horaire</span>
-        <h4>Heure de départ</h4>
-        <p>Celle du train enregistré, ou du prochain train dans votre plage horaire.</p>
-      </div>
-      <div class="feat-card">
-        <span class="feat-tag">Voie</span>
-        <h4>Voie de départ</h4>
-        <p>Affichée dès qu'elle est communiquée par la gare, sans détour par les écrans du quai.</p>
-      </div>
-      <div class="feat-card">
-        <span class="feat-tag">Temps réel</span>
-        <h4>Retard</h4>
-        <p>Mis à jour automatiquement, pour savoir si vous pouvez ralentir le pas.</p>
-      </div>
-      <div class="feat-card">
-        <span class="feat-tag">Identification</span>
-        <h4>Numéro de train</h4>
-        <p>Utile pour vérifier la composition ou retrouver l'annonce en gare.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="compare" id="comparaison">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">Comparatif</p>
-      <h2 class="display">Un train, pas un panneau entier</h2>
-      <p>Les écrans en gare, Ma Gare et SNCF Connect font bien leur travail : tout montrer, pour toute la gare. Nextation fait l'inverse.</p>
-    </div>
-    <div class="table-scroll">
-    <table class="compare-table">
-      <thead>
-        <tr>
-          <th scope="col"></th>
-          <th scope="col">Écrans en gare</th>
-          <th scope="col">Ma Gare</th>
-          <th scope="col">SNCF Connect</th>
-          <th scope="col" class="col-nextation">Nextation</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Affiche tous les départs</td>
-          <td class="yes">Oui</td>
-          <td class="yes">Oui</td>
-          <td class="yes">Oui</td>
-          <td class="no col-nextation">Non — juste le vôtre</td>
-        </tr>
-        <tr>
-          <td>Widget sur l'écran d'accueil</td>
-          <td class="no">—</td>
-          <td class="yes">Oui, pour toute la gare</td>
-          <td class="yes">Oui, pour toute la gare</td>
-          <td class="yes col-nextation">Oui, pour votre train</td>
-        </tr>
-        <tr>
-          <td>Comprend une plage horaire personnalisée</td>
-          <td class="no">Non</td>
-          <td class="no">Non</td>
-          <td class="no">Non</td>
-          <td class="yes col-nextation">Oui</td>
-        </tr>
-      </tbody>
-    </table>
-    </div>
-  </div>
-</section>
-
-<section class="cta" id="cta">
-  <div class="wrap">
-    <p class="eyebrow" style="color:#8DA3B0;">Disponibilité</p>
-    <h2 class="display">Nextation arrive sur Android</h2>
-    <p>L'application est en cours de préparation pour le Google Play Store. Le lien de téléchargement remplacera ce bouton dès la mise en ligne.</p>
-    <div class="cta-row">
-      <a class="btn btn-primary" href="#top">Bientôt disponible</a>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <div class="wrap footer-inner">
-    <span>© 2026 Nextation</span>
-    <div class="footer-links">
-      <a href="https://www.instagram.com/nextation.app" target="_blank" rel="noopener">@nextation.app</a>
-      <a href="mentions-legales.html">Mentions légales</a>
-      <a href="confidentialite.html">Confidentialité</a>
-      <a href="cgu.html">CGU</a>
-      <a href="mailto:support@studio.bzh">support@studio.bzh</a>
-    </div>
-  </div>
-</footer>
-
 </body>
 </html>
