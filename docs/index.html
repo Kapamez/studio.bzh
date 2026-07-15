@@ -30,9 +30,9 @@
             display: flex;
             flex-direction: column;
             align-items: flex-start; /* Aligne le contenu à gauche */
-            justify-content: center;
+            justify-content: flex-start; /* Aligne vers le haut */
             text-align: left; /* Aligne le texte à gauche */
-            padding: 2rem 10%; /* Augmentation du padding pour décoller du bord gauche */
+            padding: 15vh 10% 2rem 10%; /* Positionne le contenu environ aux 3/4 de la hauteur */
             background: url('background_2.jpg') no-repeat center center/cover;
         }
 
@@ -46,20 +46,20 @@
             font-family: 'Playfair Display', serif;
             font-size: clamp(3rem, 10vw, 7rem);
             font-weight: 500;
-            color: #f7f2ec; /* Blanc orangé */
+            color: #ffffff; /* Uniquement du blanc */
             line-height: 1;
             margin-bottom: 0.5rem;
             letter-spacing: -0.02em;
         }
 
         .hero__title .dot {
-            color: #c45c26;
+            color: #ffffff; /* Uniquement du blanc */
         }
 
         .hero__tagline {
             font-size: clamp(0.9rem, 2vw, 1.1rem);
             font-weight: 300;
-            color: #f7f2ec; /* Blanc orangé */
+            color: #ffffff; /* Uniquement du blanc */
             opacity: 0.8;
             margin-bottom: 2rem;
             letter-spacing: 0.05em;
@@ -68,17 +68,20 @@
         .hero__link {
             display: inline-flex;
             align-items: center;
-            color: #c45c26;
+            justify-content: center;
+            color: #ffffff; /* Uniquement du blanc */
             text-decoration: none;
             font-size: 0.85rem;
             font-weight: 500;
             letter-spacing: 0.05em;
             text-transform: uppercase;
-            padding: 0.75rem 1.5rem;
-            border: 1px solid rgba(196, 92, 38, 0.5);
+            padding: 0.75rem 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.5); /* Bordure blanche semi-transparente */
             border-radius: 100px;
             transition: all 0.3s ease;
             background: transparent; /* Bouton transparent */
+            min-width: 416px; /* Largeur minimale pour éviter le changement de taille au survol */
+            text-align: center;
         }
 
         /* Gestion du changement de texte au survol */
@@ -87,9 +90,9 @@
         }
 
         .hero__link:hover {
-            background: #c45c26;
-            color: #ffffff;
-            border-color: #c45c26;
+            background: #ffffff;
+            color: #1a2744; /* Le texte passe sur la couleur de fond pour rester lisible */
+            border-color: #ffffff;
             transform: translateY(-2px);
         }
 
