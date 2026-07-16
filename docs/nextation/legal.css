@@ -55,23 +55,44 @@ a:focus-visible, button:focus-visible {
   flex-wrap: wrap;
 }
 .board-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.board-logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  display: block;
+  flex-shrink: 0;
+}
+.board-brand-text {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
   font-family: 'Racing Sans One', sans-serif;
   font-weight: 400;
   font-size: 1.3rem;
   letter-spacing: 0.02em;
+}
+.board-parent {
+  font-size: 0.85rem;
+  color: #C9D2E3;
+  text-decoration: none;
+}
+.board-parent:hover {
+  color: #fff;
+}
+.board-sep {
+  font-size: 0.85rem;
+  color: #6C86A8;
+}
+.board-current {
   color: #fff;
   text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
-.board-brand::before {
-  content: "";
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--amber);
-  display: inline-block;
+.board-current:hover {
+  color: var(--amber);
 }
 .board-nav {
   display: flex;

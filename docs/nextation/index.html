@@ -98,12 +98,10 @@ img, svg { max-width: 100%; display: block; }
   align-items: center;
   gap: 8px;
 }
-.brand::before {
-  content: "";
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--accent);
+.brand-logo {
+  height: 26px;
+  width: auto;
+  display: block;
 }
 .nav-links {
   display: flex;
@@ -531,8 +529,9 @@ footer {
 
 <nav class="nav">
   <div class="nav-inner">
-    <a class="brand" href="#top">Nextation</a>
+    <a class="brand" href="#top"><img src="logo_soft.png" alt="" class="brand-logo">Nextation</a>
     <div class="nav-links">
+      <a href="https://studio.bzh" target="_blank" rel="noopener">studio.bzh</a>
       <a href="#genesis">Pourquoi</a>
       <a href="#modes">Fonctionnement</a>
       <a href="#comparaison">Comparatif</a>
