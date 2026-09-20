@@ -16,7 +16,7 @@
 
         html, body {
             width: 100%;
-            overflow-x: hidden; /* évite tout débordement horizontal, quel que soit le contenu */
+            overflow-x: hidden;
         }
 
         body {
@@ -33,10 +33,10 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: flex-start; /* Aligne le contenu à gauche */
-            justify-content: flex-start; /* Aligne vers le haut */
-            text-align: left; /* Aligne le texte à gauche */
-            padding: 15vh 8% 2rem 8%; /* Positionne le contenu environ aux 3/4 de la hauteur */
+            align-items: flex-start;
+            justify-content: flex-start;
+            text-align: left;
+            padding: 15vh 8% 2rem 8%;
             background: url('background_2.jpg') no-repeat center center/cover;
         }
 
@@ -61,20 +61,20 @@
             font-family: 'Playfair Display', serif;
             font-size: clamp(3rem, 10vw, 7rem);
             font-weight: 500;
-            color: #ffffff; /* Uniquement du blanc */
+            color: #ffffff;
             line-height: 1;
             margin-bottom: 0.5rem;
             letter-spacing: -0.02em;
         }
 
         .hero__title .dot {
-            color: #ffffff; /* Uniquement du blanc */
+            color: #ffffff;
         }
 
         .hero__tagline {
             font-size: clamp(0.9rem, 2vw, 1.1rem);
             font-weight: 300;
-            color: #ffffff; /* Uniquement du blanc */
+            color: #ffffff;
             opacity: 0.8;
             margin-bottom: 2rem;
             letter-spacing: 0.05em;
@@ -84,26 +84,26 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            color: #ffffff; /* Uniquement du blanc */
+            color: #ffffff;
             text-decoration: none;
             font-size: clamp(0.7rem, 2.3vw, 0.85rem);
             font-weight: 500;
             letter-spacing: 0.05em;
             text-transform: uppercase;
             padding: 0.75rem 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.5); /* Bordure blanche semi-transparente */
+            border: 1px solid rgba(255, 255, 255, 0.5);
             border-radius: 100px;
             transition: all 0.3s ease;
-            background: transparent; /* Bouton transparent */
-            max-width: 100%; /* ne dépasse jamais la largeur de l'écran */
+            background: transparent;
+            max-width: 100%;
             width: fit-content;
             text-align: center;
-            white-space: normal; /* le texte peut revenir à la ligne si besoin sur petit écran */
+            white-space: normal;
         }
 
         .hero__link:hover {
             background: #ffffff;
-            color: #1a2744; /* Le texte passe sur la couleur de fond pour rester lisible */
+            color: #1a2744;
             border-color: #ffffff;
             transform: translateY(-2px);
         }
