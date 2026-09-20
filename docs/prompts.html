@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Corpus vocal — enregistrement</title>
+<style>
+  body { font-family: system-ui, sans-serif; margin: 0; background: #111; color: #eee; padding-bottom: 90px; }
+  header { position: sticky; top: 0; background: #111; padding: 10px 16px 8px; border-bottom: 1px solid #333; z-index: 5; }
+  h1 { font-size: 16px; margin: 0; }
+  .row { display: flex; gap: 8px; align-items: center; margin-top: 8px; flex-wrap: wrap; }
+  #speaker { background: #222; color: #eee; border: 1px solid #444; border-radius: 6px; padding: 6px 10px; font-size: 15px; width: 120px; }
+  #progress { font-weight: bold; color: #7fd17f; margin-left: auto; }
+  .notice { font-size: 13px; color: #cde; background: #1d2a1d; border: 1px solid #2d4a2d; border-radius: 8px; padding: 8px 12px; margin-top: 8px; }
+  .reset { background: #333; color: #eee; border: none; border-radius: 6px; padding: 6px 10px; font-size: 12px; }
+  li { list-style: none; padding: 12px 16px; border-bottom: 1px solid #2a2a2a; }
+  li.done { opacity: .4; }
+  .id { font-family: monospace; background: #2d4a2d; color: #9fe89f; padding: 1px 7px; border-radius: 6px; font-size: 12px; }
+  .txt { font-size: 20px; line-height: 1.35; margin: 8px 0 10px; }
+  .btns { display: flex; gap: 10px; align-items: center; }
+  .rec { background: #c33; border: none; color: #fff; border-radius: 50%; width: 44px; height: 44px; font-size: 18px; }
+  .rec.stop { background: #555; border-radius: 10px; }
+  .replay { background: #2a4a6a; color: #fff; border: none; border-radius: 8px; padding: 8px 12px; font-size: 14px; }
+  .status { font-size: 13px; color: #999; margin-left: 8px; }
+  .status.ok { color: #7fd17f; }
+  footer { position: fixed; bottom: 0; left: 0; right: 0; background: #181818; border-top: 1px solid #333; padding: 12px 16px; display: flex; gap: 10px; z-index: 5; }
+  footer button { flex: 1; border: none; border-radius: 10px; padding: 14px; font-size: 16px; font-weight: bold; }
+  #dlall { background: #4a7; color: #0a2a12; }
+  #dlzipnote { background: #333; color: #ccc; font-size: 12px; font-weight: normal; }
+  ul { padding: 0; margin: 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Corpus vocal — <span id="progress"></span></h1>
+  <div class="row">
+    <label>Ton prénom : <input id="speaker" placeholder="ex: kimi"></label>
+    <button class="reset" onclick="if(confirm('Effacer la progression (les prises restent téléchargeables) ?')){localStorage.clear();location.reload()}">Reset</button>
+    <span id="progress"></span>
+  </div>
+  <div class="notice" id="notice">Appuie sur le bouton rouge, parle, réappuie pour arrêter. La prise est gardée en mémoire — télécharge tout à la fin avec le bouton vert (dossier Téléchargements).</div>
+</header>
+<ul id="list"></ul>
+<footer>
+  <button id="dlzipnote" onclick="dlOne()">Télécharger la prise sélectionnée</button>
+  <button id="dlall" onclick="dlAll()">Télécharger tout (<span id="nclip">0</span>)</button>
+</footer>
+<script>
+const PROMPTS = [{"id": "q001", "text": "à quelle heure part le prochain train de garges pour chatelet ?"}, {"id": "q002", "text": "prochain train de garges pour chatelet"}, {"id": "q003", "text": "c'est à quelle heure le prochain départ de garges vers chatelet"}, {"id": "q004", "text": "quel est le prochain train au départ de garges direction chatelet ?"}, {"id": "q005", "text": "à quelle heure part le prochain train de chatelet pour garges ?"}, {"id": "q006", "text": "prochain train de chatelet pour garges"}, {"id": "q007", "text": "c'est à quelle heure le prochain départ de chatelet vers garges"}, {"id": "q008", "text": "quel est le prochain train au départ de chatelet direction garges ?"}, {"id": "q009", "text": "à quelle heure part le prochain train de gare du nord pour lille flandres ?"}, {"id": "q010", "text": "prochain train de gare du nord pour lille flandres"}, {"id": "q011", "text": "c'est à quelle heure le prochain départ de gare du nord vers lille flandres"}, {"id": "q012", "text": "quel est le prochain train au départ de gare du nord direction lille flandres ?"}, {"id": "q013", "text": "à quelle heure part le prochain train de gare de lyon pour lyon part dieu ?"}, {"id": "q014", "text": "prochain train de gare de lyon pour lyon part dieu"}, {"id": "q015", "text": "c'est à quelle heure le prochain départ de gare de lyon vers lyon part dieu"}, {"id": "q016", "text": "quel est le prochain train au départ de gare de lyon direction lyon part dieu ?"}, {"id": "q017", "text": "à quelle heure part le prochain train de montparnasse pour bordeaux ?"}, {"id": "q018", "text": "prochain train de montparnasse pour bordeaux"}, {"id": "q019", "text": "c'est à quelle heure le prochain départ de montparnasse vers bordeaux"}, {"id": "q020", "text": "quel est le prochain train au départ de montparnasse direction bordeaux ?"}, {"id": "q021", "text": "à quelle heure part le prochain train de gare de l est pour strasbourg ?"}, {"id": "q022", "text": "prochain train de gare de l est pour strasbourg"}, {"id": "q023", "text": "c'est à quelle heure le prochain départ de gare de l est vers strasbourg"}, {"id": "q024", "text": "quel est le prochain train au départ de gare de l est direction strasbourg ?"}, {"id": "q025", "text": "à quelle heure part le prochain train de gare de l est pour reims ?"}, {"id": "q026", "text": "prochain train de gare de l est pour reims"}, {"id": "q027", "text": "c'est à quelle heure le prochain départ de gare de l est vers reims"}, {"id": "q028", "text": "quel est le prochain train au départ de gare de l est direction reims ?"}, {"id": "q029", "text": "à quelle heure part le prochain train de austerlitz pour toulouse ?"}, {"id": "q030", "text": "prochain train de austerlitz pour toulouse"}, {"id": "q031", "text": "c'est à quelle heure le prochain départ de austerlitz vers toulouse"}, {"id": "q032", "text": "quel est le prochain train au départ de austerlitz direction toulouse ?"}, {"id": "q033", "text": "à quelle heure part le prochain train de gare du nord pour bruxelles ?"}, {"id": "q034", "text": "prochain train de gare du nord pour bruxelles"}, {"id": "q035", "text": "c'est à quelle heure le prochain départ de gare du nord vers bruxelles"}, {"id": "q036", "text": "quel est le prochain train au départ de gare du nord direction bruxelles ?"}, {"id": "q037", "text": "à quelle heure part le prochain train de gare du nord pour londres ?"}, {"id": "q038", "text": "prochain train de gare du nord pour londres"}, {"id": "q039", "text": "c'est à quelle heure le prochain départ de gare du nord vers londres"}, {"id": "q040", "text": "quel est le prochain train au départ de gare du nord direction londres ?"}, {"id": "q041", "text": "à quelle heure part le prochain train de lyon part dieu pour marseille ?"}, {"id": "q042", "text": "prochain train de lyon part dieu pour marseille"}, {"id": "q043", "text": "c'est à quelle heure le prochain départ de lyon part dieu vers marseille"}, {"id": "q044", "text": "quel est le prochain train au départ de lyon part dieu direction marseille ?"}, {"id": "q045", "text": "à quelle heure part le prochain train de bordeaux pour toulouse ?"}, {"id": "q046", "text": "prochain train de bordeaux pour toulouse"}, {"id": "q047", "text": "c'est à quelle heure le prochain départ de bordeaux vers toulouse"}, {"id": "q048", "text": "quel est le prochain train au départ de bordeaux direction toulouse ?"}, {"id": "q049", "text": "à quelle heure part le prochain train de nantes pour rennes ?"}, {"id": "q050", "text": "prochain train de nantes pour rennes"}, {"id": "q051", "text": "c'est à quelle heure le prochain départ de nantes vers rennes"}, {"id": "q052", "text": "quel est le prochain train au départ de nantes direction rennes ?"}, {"id": "q053", "text": "à quelle heure part le prochain train de lille europe pour gare du nord ?"}, {"id": "q054", "text": "prochain train de lille europe pour gare du nord"}, {"id": "q055", "text": "c'est à quelle heure le prochain départ de lille europe vers gare du nord"}, {"id": "q056", "text": "quel est le prochain train au départ de lille europe direction gare du nord ?"}, {"id": "q057", "text": "à quelle heure part le prochain train de gare de lyon pour annecy ?"}, {"id": "q058", "text": "prochain train de gare de lyon pour annecy"}, {"id": "q059", "text": "c'est à quelle heure le prochain départ de gare de lyon vers annecy"}, {"id": "q060", "text": "quel est le prochain train au départ de gare de lyon direction annecy ?"}, {"id": "q061", "text": "à quelle heure part le prochain train de dijon pour mulhouse ?"}, {"id": "q062", "text": "prochain train de dijon pour mulhouse"}, {"id": "q063", "text": "c'est à quelle heure le prochain départ de dijon vers mulhouse"}, {"id": "q064", "text": "quel est le prochain train au départ de dijon direction mulhouse ?"}, {"id": "q065", "text": "à quelle heure part le prochain train de metz pour luxembourg ?"}, {"id": "q066", "text": "prochain train de metz pour luxembourg"}, {"id": "q067", "text": "c'est à quelle heure le prochain départ de metz vers luxembourg"}, {"id": "q068", "text": "quel est le prochain train au départ de metz direction luxembourg ?"}, {"id": "q069", "text": "à quelle heure part le prochain train de lausanne pour gare de lyon ?"}, {"id": "q070", "text": "prochain train de lausanne pour gare de lyon"}, {"id": "q071", "text": "c'est à quelle heure le prochain départ de lausanne vers gare de lyon"}, {"id": "q072", "text": "quel est le prochain train au départ de lausanne direction gare de lyon ?"}, {"id": "q073", "text": "à quelle heure part le prochain train de nice pour marseille ?"}, {"id": "q074", "text": "prochain train de nice pour marseille"}, {"id": "q075", "text": "c'est à quelle heure le prochain départ de nice vers marseille"}, {"id": "q076", "text": "quel est le prochain train au départ de nice direction marseille ?"}, {"id": "q077", "text": "à quelle heure part le prochain train de brest pour rennes ?"}, {"id": "q078", "text": "prochain train de brest pour rennes"}, {"id": "q079", "text": "c'est à quelle heure le prochain départ de brest vers rennes"}, {"id": "q080", "text": "quel est le prochain train au départ de brest direction rennes ?"}, {"id": "q081", "text": "à quelle heure part le prochain train de saint lazare pour nantes ?"}, {"id": "q082", "text": "prochain train de saint lazare pour nantes"}, {"id": "q083", "text": "c'est à quelle heure le prochain départ de saint lazare vers nantes"}, {"id": "q084", "text": "quel est le prochain train au départ de saint lazare direction nantes ?"}, {"id": "q085", "text": "à quelle heure part le prochain train de sarcelles pour chatelet ?"}, {"id": "q086", "text": "prochain train de sarcelles pour chatelet"}, {"id": "q087", "text": "c'est à quelle heure le prochain départ de sarcelles vers chatelet"}, {"id": "q088", "text": "quel est le prochain train au départ de sarcelles direction chatelet ?"}, {"id": "q089", "text": "à quelle heure part le prochain train de geneve pour gare de lyon ?"}, {"id": "q090", "text": "prochain train de geneve pour gare de lyon"}, {"id": "q091", "text": "c'est à quelle heure le prochain départ de geneve vers gare de lyon"}, {"id": "q092", "text": "quel est le prochain train au départ de geneve direction gare de lyon ?"}, {"id": "q093", "text": "à quelle heure part le prochain train de aix en provence pour montparnasse ?"}, {"id": "q094", "text": "prochain train de aix en provence pour montparnasse"}, {"id": "q095", "text": "c'est à quelle heure le prochain départ de aix en provence vers montparnasse"}, {"id": "q096", "text": "quel est le prochain train au départ de aix en provence direction montparnasse ?"}, {"id": "q097", "text": "je veux aller de garges à chatelet"}, {"id": "q098", "text": "je veux aller de montparnasse à lyon part dieu"}, {"id": "q099", "text": "je veux aller de bordeaux à strasbourg"}, {"id": "q100", "text": "je veux aller de nantes à lille flandres"}, {"id": "q101", "text": "je veux aller de gare du nord à geneve"}, {"id": "q102", "text": "je veux aller de marseille à nice"}, {"id": "q103", "text": "prochain tgv de garges vers chatelet"}, {"id": "q104", "text": "prochain tgv de gare de lyon vers avignon tgv"}, {"id": "q105", "text": "prochain tgv de gare du nord vers londres"}, {"id": "q106", "text": "prochain tgv de strasbourg vers gare de l est"}, {"id": "q107", "text": "prochain train de gare du nord"}, {"id": "q108", "text": "quel train part de gare du nord maintenant"}, {"id": "q109", "text": "prochain train de montparnasse"}, {"id": "q110", "text": "quel train part de montparnasse maintenant"}, {"id": "q111", "text": "prochain train de gare de lyon"}, {"id": "q112", "text": "quel train part de gare de lyon maintenant"}, {"id": "q113", "text": "prochain train de dijon"}, {"id": "q114", "text": "quel train part de dijon maintenant"}, {"id": "q115", "text": "prochain train de metz"}, {"id": "q116", "text": "quel train part de metz maintenant"}, {"id": "q117", "text": "prochain train de lille"}, {"id": "q118", "text": "quel train part de lille maintenant"}, {"id": "q119", "text": "prochain train de bruxelles"}, {"id": "q120", "text": "quel train part de bruxelles maintenant"}, {"id": "q121", "text": "prochain train de annecy"}, {"id": "q122", "text": "quel train part de annecy maintenant"}, {"id": "q123", "text": "prochain train de garges pour chatelet demain matin"}, {"id": "q124", "text": "prochain train de garges pour chatelet à 19h55"}, {"id": "q125", "text": "prochain train de montparnasse pour bordeaux demain matin"}, {"id": "q126", "text": "prochain train de montparnasse pour bordeaux à 19h55"}, {"id": "q127", "text": "prochain train de gare de l est pour reims demain matin"}, {"id": "q128", "text": "prochain train de gare de l est pour reims à 19h55"}, {"id": "q129", "text": "prochain train de lyon part dieu pour marseille demain matin"}, {"id": "q130", "text": "prochain train de lyon part dieu pour marseille à 19h55"}, {"id": "q131", "text": "prochain train de gare du nord pour bruxelles demain matin"}, {"id": "q132", "text": "prochain train de gare du nord pour bruxelles à 19h55"}, {"id": "q133", "text": "prochain train de brest pour rennes demain matin"}, {"id": "q134", "text": "prochain train de brest pour rennes à 19h55"}, {"id": "q135", "text": "prochain train de gargessarcelles pour chatelet dans 20 minutes"}, {"id": "q136", "text": "prochain train de dijon pour mulhouse ce soir après 18h"}, {"id": "q137", "text": "prochain train de rennes pour nantes lundi prochain"}, {"id": "q138", "text": "train pour strasbourg après demain soir"}, {"id": "q139", "text": "trouve un train de Lille Europe pour CDG lundi prochain, après 10h00."}, {"id": "q140", "text": "prochain train de gare du nord pour lille europe demain à 19h55"}, {"id": "q141", "text": "trouve un train pour ce matin à 7h00 Reims Strasbourg"}, {"id": "q142", "text": "quelle heure pour le prochain Stade de France Creil ?"}, {"id": "q143", "text": "Comment aller en RER de la Défense à Saint Denis ?"}, {"id": "q144", "text": "à quelle heure part le premier train demain pour aller de Calais à Boulogne ?"}, {"id": "q145", "text": "Trouve moi un TGV pour aller de Champagne Ardenne à Disney le 28 septembre."}, {"id": "q146", "text": "prochain train de gare de lyon pour disneyland paris"}, {"id": "q147", "text": "à quelle heure part le prochain RER de Garges pour Châtelet ?"}, {"id": "q148", "text": "à quelle heure part le prochain rer de gargessarcelles pour chatelet les halles"}, {"id": "q149", "text": "prochain train de marsseille st charles vers lyon part dieu"}, {"id": "q150", "text": "prochain tgv de paris montparnase vers bordeaux st jean"}, {"id": "q151", "text": "train de chatelet pour sarcelles"}, {"id": "q152", "text": "prochain train de guarge pour chatelet"}, {"id": "q153", "text": "horaires des trains de dijon pour mulhouse"}, {"id": "q154", "text": "prochain train au départ de lille pour gare du nord"}, {"id": "q155", "text": "est-ce qu'il y a un train de reims pour gare de l'est"}, {"id": "q156", "text": "prochain rer de chatelet vers marne la vallee"}, {"id": "q157", "text": "prochain transilien de gare du nord pour sarcelles"}, {"id": "x001", "text": "Garges Sarcelles, Châtelet Les Halles, Boulogne sur Mer, Lille Europe"}, {"id": "x002", "text": "Marne la Vallée Chessy, Champagne Ardenne TGV, Aix en Provence, Valence TGV"}, {"id": "x003", "text": "Hesdigneul les Boulogne, Saint Pol sur Ternoise, Watten Eperlecques, Rang du Fliers Verton"}, {"id": "x004", "text": "sept heures cinquante huit, dix neuf heures cinq, midi trente, huit heures quarante cinq"}, {"id": "x005", "text": "demain matin, après demain soir, lundi prochain, dans vingt minutes"}, {"id": "x006", "text": "à quelle heure part le prochain train ?"}, {"id": "x007", "text": "euh... le prochain train pour... Châtelet, s'il vous plaît"}, {"id": "x008", "text": "Cannes, Vannes, Caen, Quimper"}, {"id": "x009", "text": "Saint Denis, Saint Étienne, Saint Lazare, Saint Quentin"}, {"id": "x010", "text": "je voudrais un billet de Paris à Lyon"}, {"id": "x011", "text": "c'est quoi le prochain RER D au départ de Garges Sarcelles ?"}, {"id": "x012", "text": "train numéro quatre vingt seize en provenance de Nice"}, {"id": "x013", "text": "Val de Fontenay, Fontenay aux Roses, Fontenay sous Bois"}, {"id": "x014", "text": "Vitry le François, Vitry sur Seine, Vitry en Artois"}, {"id": "x015", "text": "montre moi les horaires du week-end prochain pour Bordeaux Toulouse"}, {"id": "i001", "text": "prochain RER de Juvisy pour Châtelet"}, {"id": "i002", "text": "à quelle heure part le prochain train de Choisy-le-Roi pour Saint-Michel Notre-Dame ?"}, {"id": "i003", "text": "prochain RER C de Val de Fontenay vers Austerlitz"}, {"id": "i004", "text": "c'est à quelle heure le prochain départ de Magenta pour Haussmann Saint-Lazare"}, {"id": "i005", "text": "quel est le prochain train au départ de Rosa Parks pour Magenta ?"}, {"id": "i006", "text": "prochain train de Garges Sarcelles pour Gare du Nord"}, {"id": "i007", "text": "à quelle heure part le prochain RER D de Villiers-le-Bel pour Melun ?"}, {"id": "i008", "text": "prochain RER A de Cergy Préfecture pour Charles de Gaulle Étoile"}, {"id": "i009", "text": "prochain train de La Courneuve Aubervilliers pour Gare du Nord"}, {"id": "i010", "text": "quel est le prochain RER B de Aulnay sous Bois vers Châtelet les Halles ?"}, {"id": "i011", "text": "prochain Transilien de Paris Saint-Lazare pour Poissy"}, {"id": "i012", "text": "à quelle heure part le prochain train de Maisons-Alfort Alfortville pour Gare de Lyon ?"}, {"id": "i013", "text": "prochain RER de Houilles Carrières sur Seine pour Haussmann Saint-Lazare"}, {"id": "i014", "text": "prochain train de Saint-Denis pour La Plaine Stade de France"}, {"id": "i015", "text": "quel est le prochain RER E de Val de Fontenay pour Magenta ?"}, {"id": "i016", "text": "prochain RER de Nanterre Préfecture pour Saint-Michel Notre-Dame"}, {"id": "i017", "text": "à quelle heure part le prochain train de Bondy pour Gare de l'Est ?"}, {"id": "i018", "text": "prochain RER de Villeneuve Saint-Georges pour Bibliothèque François Mitterrand"}, {"id": "i019", "text": "prochain train de Sartrouville pour Clichy Levallois"}, {"id": "i020", "text": "quel est le prochain Transilien de Ermont Eaubonne pour Paris Nord ?"}, {"id": "i021", "text": "prochain RER C de Choisy-le-Roi pour Invalides"}, {"id": "i022", "text": "à quelle heure part le prochain train de Asnières sur Seine pour Saint-Lazare ?"}, {"id": "i023", "text": "prochain RER de Pierrefitte Stains pour Gare du Nord"}, {"id": "i024", "text": "prochain train de Versailles Chantiers pour Montparnasse"}, {"id": "i025", "text": "quel est le prochain RER B de Saint-Quentin-en-Yvelines pour Châtelet ?"}, {"id": "i026", "text": "prochain RER de Évry Courcouronnes pour Juvisy"}, {"id": "i027", "text": "à quelle heure part le prochain train de Noisy-le-Sec pour Magenta ?"}, {"id": "i028", "text": "prochain RER de Argenteuil pour Saint-Lazare"}, {"id": "i029", "text": "prochain train de Épinay Villetaneuse pour Paris Nord"}, {"id": "i030", "text": "quel est le prochain RER A de Bécon les Bruyères pour Charles de Gaulle Étoile ?"}, {"id": "i031", "text": "prochain RER de La Défense pour Châtelet les Halles"}, {"id": "i032", "text": "à quelle heure part le prochain train du Bourget pour Gare du Nord ?"}, {"id": "i033", "text": "prochain RER B de La Plaine Stade de France pour Saint-Michel Notre-Dame"}, {"id": "i034", "text": "prochain train de Chelles Gournay pour Gare de l'Est"}, {"id": "i035", "text": "quel est le prochain RER D de Juvisy pour Châtelet les Halles ?"}, {"id": "i036", "text": "prochain RER de Choisy-le-Roi pour Austerlitz demain matin"}, {"id": "i037", "text": "à quelle heure part le prochain RER de Juvisy pour Châtelet dans 20 minutes ?"}, {"id": "i038", "text": "prochain RER D de Melun pour Gare de Lyon après 18h"}, {"id": "i039", "text": "prochain Transilien de Paris Montparnasse pour Versailles Chantiers dans 2 heures"}, {"id": "i040", "text": "quel est le prochain train au départ de Garges Sarcelles pour Aéroport Charles de Gaulle 2 ?"}];
+let stream = null, rec = null, chunks = [], activeId = null;
+const clips = {};  // id -> {blob, url}
+const speakerInput = document.getElementById('speaker');
+speakerInput.value = localStorage.getItem('nxt-speaker') || '';
+speakerInput.addEventListener('input', () => localStorage.setItem('nxt-speaker', speakerInput.value));
+
+function spk() { return (speakerInput.value || 'phone').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '') || 'phone'; }
+function fname(id) { return id + '_' + spk() + '.webm'; }
+
+function refresh() {
+  let n = 0;
+  document.querySelectorAll('li').forEach(li => {
+    const id = li.dataset.id;
+    const done = !!clips[id] || localStorage.getItem('nxt-' + id) === '1';
+    li.classList.toggle('done', done);
+    if (done) n++;
+    const st = li.querySelector('.status');
+    if (clips[id]) { st.textContent = 'prise OK ✓'; st.className = 'status ok'; }
+  });
+  document.getElementById('progress').textContent = n + ' / ' + PROMPTS.length;
+  document.getElementById('nclip').textContent = Object.keys(clips).length;
+}
+
+async function getMic() {
+  if (stream) return stream;
+  stream = await navigator.mediaDevices.getUserMedia({ audio: { channelCount: 1, echoCancellation: true, noiseSuppression: true } });
+  document.getElementById('notice').textContent = 'Micro autorisé — bon enregistrement ! Parle naturellement, comme à un assistant.';
+  return stream;
+}
+
+async function toggle(btn) {
+  const li = btn.closest('li');
+  const id = li.dataset.id;
+  if (rec && activeId === id) {
+    rec.stop();
+    return;
+  }
+  if (rec) { rec.stop(); }  // coupe la prise en cours ailleurs
+  let s;
+  try { s = await getMic(); }
+  catch (e) { alert('Accès micro refusé : autorise le micro pour cette page (icône cadenassé dans la barre d\'adresse).'); return; }
+  chunks = [];
+  activeId = id;
+  rec = new MediaRecorder(s, { mimeType: MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/webm' });
+  rec.ondataavailable = e => { if (e.data.size) chunks.push(e.data); };
+  rec.onstop = () => {
+    if (!chunks.length) return;
+    const blob = new Blob(chunks, { type: 'audio/webm' });
+    if (clips[id]) URL.revokeObjectURL(clips[id].url);
+    clips[id] = { blob, url: URL.createObjectURL(blob) };
+    localStorage.setItem('nxt-' + id, '1');
+    btn.classList.remove('stop');
+    btn.textContent = '●';
+    refresh();
+  };
+  rec.start();
+  btn.classList.add('stop');
+  btn.textContent = '■';
+}
+
+function dl(id) {
+  const c = clips[id];
+  if (!c) return;
+  const a = document.createElement('a');
+  a.href = c.url;
+  a.download = fname(id);
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
+function dlAll() {
+  const ids = Object.keys(clips);
+  if (!ids.length) { alert('Aucune prise enregistrée.'); return; }
+  if (confirm('Télécharger ' + ids.length + ' fichiers dans Téléchargements ?')) ids.forEach((id, i) => setTimeout(() => dl(id), i * 400));
+}
+function dlOne() {
+  const sel = document.querySelector('li.sel');
+  dl(sel ? sel.dataset.id : Object.keys(clips).at(-1));
+}
+
+const ul = document.getElementById('list');
+for (const p of PROMPTS) {
+  const li = document.createElement('li');
+  li.dataset.id = p.id;
+  const id = document.createElement('span'); id.className = 'id'; id.textContent = p.id;
+  const txt = document.createElement('div'); txt.className = 'txt'; txt.textContent = p.text;
+  const btns = document.createElement('div'); btns.className = 'btns';
+  const recBtn = document.createElement('button'); recBtn.className = 'rec'; recBtn.textContent = '●';
+  recBtn.onclick = () => toggle(recBtn);
+  const playBtn = document.createElement('button'); playBtn.className = 'replay'; playBtn.textContent = '▶ écouter'; playBtn.style.display = 'none';
+  playBtn.onclick = () => { const c = clips[p.id]; if (c) new Audio(c.url).play(); };
+  const st = document.createElement('span'); st.className = 'status';
+  btns.appendChild(recBtn); btns.appendChild(playBtn); btns.appendChild(st);
+  li.appendChild(id); li.appendChild(txt); li.appendChild(btns);
+  ul.appendChild(li);
+}
+refresh();
+</script>
+</body>
+</html>
