@@ -63,6 +63,16 @@
           <td>Rapports pseudonymisés (Crashlytics)</td>
           <td><strong>Intérêt légitime</strong> (stabilité de l'application)</td>
         </tr>
+        <tr>
+          <td>Recherche d'itinéraires par commande vocale</td>
+          <td>Enregistrement audio (format WAV court, < 10 s) et transcription textuelle brute</td>
+          <td><strong>Consentement</strong> (art. 6-1-a : action volontaire d'appui sur le micro après opt-in)</td>
+        </tr>
+        <tr>
+          <td>Régulation et anti-abus du service vocal</td>
+          <td>Identifiant technique d'instance (FID) et date de la requête</td>
+          <td><strong>Intérêt légitime</strong>(art. 6-1-f : protection contre la surcharge et maintien de la gratuité)</td>
+        </tr>
       </tbody>
     </table>
   </section>
@@ -79,6 +89,7 @@
     <h2><span class="num">03</span>Conservation et rétention</h2>
     <div class="callout">
       Les <strong>Données de Transport</strong> et le <strong>Token FCM</strong> sont automatiquement et définitivement supprimés du Backend <strong>30 heures après la date du trajet</strong>. Aucune archive n'est conservée.
+      Les compteurs de requêtes vocales associés au FID sont conservés pour la seule journée en cours afin de limiter les abus (quota journalier), puis sont <strong>automatiquement et définitivement supprimés</strong>strong> lors du cycle quotidien de nettoyage de la base de données.
     </div>
   </section>
 
