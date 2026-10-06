@@ -33,7 +33,7 @@
   <header class="doc-header">
     <p class="doc-eyebrow">Document légal 2 / 3</p>
     <h1>Politique de confidentialité</h1>
-    <p class="doc-meta">Dernière mise à jour : 7 juillet 2026 · Conforme RGPD</p>
+    <p class="doc-meta">Dernière mise à jour : 7 octobre 2026 · Conforme RGPD</p>
   </header>
 
   <section>
@@ -65,7 +65,7 @@
         </tr>
         <tr>
           <td>Recherche d'itinéraires par commande vocale</td>
-          <td>Enregistrement audio (format WAV court, < 10 s) et transcription textuelle brute</td>
+          <td>Enregistrement audio (format WAV court, &lt; 10 s) et transcription textuelle brute</td>
           <td><strong>Consentement</strong> (art. 6-1-a : action volontaire d'appui sur le micro après opt-in)</td>
         </tr>
         <tr>
@@ -82,6 +82,7 @@
     <p><strong>Localisation des traitements</strong> — Conformément au principe de transparence, l'Utilisateur est informé que si le stockage des données est maintenu en France (Paris), l'exécution technique des calculs et de la logique de l'API est effectuée sur des infrastructures situées en Belgique et en France.</p>
     <p><strong>Minimisation</strong> — Aucune donnée d'identité civile ou GPS n'est collectée. Le partage des données avec les services tiers de Google a été désactivé dans la configuration du projet, sous réserve des traitements techniques nécessaires au fonctionnement des services Firebase utilisés.</p>
     <p><strong>Firebase Crashlytics</strong> — Collecte des identifiants d'instance pseudonymisés et des métadonnées système (marque et modèle d'appareil, orientation de l'écran, utilisation de la mémoire vive, version de l'OS) pour analyser les plantages. Les données collectées par Crashlytics ne sont pas croisées avec d'autres services Google et sont utilisées uniquement pour améliorer la stabilité de l'application. Ces données ne permettent pas d'identifier directement l'Utilisateur.</p>
+    <p><strong>Fonctionnalité vocale (Opt-in et traitement éphémère)</strong> — L'utilisation de la recherche vocale est facultative et repose sur un consentement explicite préalable (<em>opt-in</em>). L'enregistrement audio (plafonné à moins de 10 secondes) transite sous forme chiffrée par notre serveur Cloud Function en France pour être transmis à l'API Mistral AI. Aucun fichier audio ni transcription textuelle n'est enregistré sur disque ou conservé en base de données : le traitement s'effectue exclusivement en mémoire vive de façon éphémère. L'option de réutilisation des données pour l'entraînement des modèles d'intelligence artificielle est désactivée.</p>
     <p><strong>Stockage local</strong> — Vos favoris sont stockés exclusivement sur votre appareil via <em>Jetpack DataStore</em>.</p>
   </section>
 
@@ -91,7 +92,7 @@
       Les <strong>Données de Transport</strong> et le <strong>Token FCM</strong> sont automatiquement et définitivement supprimés du Backend <strong>30 heures après la date du trajet</strong>. Aucune archive n'est conservée.
       <br>
       <br>
-      Les compteurs de requêtes vocales associés au FID sont conservés pour la seule journée en cours afin de limiter les abus (quota journalier), puis sont <strong>automatiquement et définitivement supprimés</strong> lors du cycle quotidien de nettoyage de la base de données.
+      Les compteurs de requêtes vocales associés au FID sont conservés pour la seule journée en cours afin de réguler l'accès (quota journalier), puis sont <strong>automatiquement et définitivement supprimés</strong> lors du cycle quotidien de nettoyage de la base de données.
     </div>
   </section>
 
