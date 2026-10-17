@@ -33,7 +33,7 @@
   <header class="doc-header">
     <p class="doc-eyebrow">Document légal 2 / 3</p>
     <h1>Politique de confidentialité</h1>
-    <p class="doc-meta">Dernière mise à jour : 7 octobre 2026 · Conforme RGPD</p>
+    <p class="doc-meta">Dernière mise à jour : 17 octobre 2026 · Conforme RGPD</p>
   </header>
 
   <section>
@@ -59,9 +59,9 @@
           <td><strong>Intérêt légitime</strong> (protection du service)</td>
         </tr>
         <tr>
-          <td>Diagnostics techniques</td>
-          <td>Rapports pseudonymisés (Crashlytics)</td>
-          <td><strong>Intérêt légitime</strong> (stabilité de l'application)</td>
+          <td>Diagnostics techniques (rapports de plantage)</td>
+          <td>Rapports pseudonymisés (Crashlytics), transmis uniquement si l'option est activée</td>
+          <td><strong>Consentement</strong> (art. 6-1-a : option facultative, désactivée par défaut, réglable dans les paramètres)</td>
         </tr>
         <tr>
           <td>Recherche d'itinéraires par commande vocale</td>
@@ -81,7 +81,9 @@
     <h2><span class="num">02</span>Traitement et confidentialité</h2>
     <p><strong>Localisation des traitements</strong> — Conformément au principe de transparence, l'Utilisateur est informé que si le stockage des données est maintenu en France (Paris), l'exécution technique des calculs et de la logique de l'API est effectuée sur des infrastructures situées en Belgique et en France.</p>
     <p><strong>Minimisation</strong> — Aucune donnée d'identité civile ou GPS n'est collectée. Le partage des données avec les services tiers de Google a été désactivé dans la configuration du projet, sous réserve des traitements techniques nécessaires au fonctionnement des services Firebase utilisés.</p>
-    <p><strong>Firebase Crashlytics</strong> — Collecte des identifiants d'instance pseudonymisés et des métadonnées système (marque et modèle d'appareil, orientation de l'écran, utilisation de la mémoire vive, version de l'OS) pour analyser les plantages. Les données collectées par Crashlytics ne sont pas croisées avec d'autres services Google et sont utilisées uniquement pour améliorer la stabilité de l'application. Ces données ne permettent pas d'identifier directement l'Utilisateur.</p>
+    <p><strong>Firebase Crashlytics (facultatif)</strong> — Le partage des rapports de plantage est facultatif et désactivé par défaut. Il se règle dans les paramètres généraux de l'application et couvre l'ensemble de l'application, et non la seule fonctionnalité vocale. Si vous l'activez, Nextation transmet à Firebase Crashlytics, service de Google, des données techniques nécessaires au diagnostic : des informations sur le plantage, l'état de l'application et de l'appareil (notamment marque et modèle, orientation de l'écran, utilisation de la mémoire vive, version de l'OS), ainsi qu'un identifiant aléatoire d'installation. La liste détaillée de ces données est publiée par Firebase dans sa <a href="https://firebase.google.com/docs/android/play-data-disclosure" target="_blank" rel="noopener">liste de données collectées par Crashlytics</a>.</p>
+    <p>Ces rapports sont <strong>pseudonymisés et ne sont pas anonymes au sens strict</strong>. Le code de Nextation ne joint ni nom, ni adresse e-mail, ni identifiant de compte aux rapports, mais l'identifiant d'installation reste un identifiant technique. Les données collectées par Crashlytics ne sont pas croisées avec d'autres services Google, sont utilisées uniquement pour améliorer la stabilité de l'application et ne permettent pas d'identifier directement l'Utilisateur. La <a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener">page de confidentialité Firebase</a> décrit les identifiants utilisés et la conservation des données par Google.</p>
+    <p><strong>Distinction avec les statistiques</strong> — Ce réglage concerne uniquement Crashlytics. La collecte Firebase Analytics est gérée séparément.</p>
     <p><strong>Fonctionnalité vocale (Opt-in et traitement éphémère)</strong> — L'utilisation de la recherche vocale est facultative et repose sur un consentement explicite préalable (<em>opt-in</em>). L'enregistrement audio (plafonné à moins de 10 secondes) transite sous forme chiffrée par notre serveur Cloud Function en France pour être transmis à l'API Mistral AI. Aucun fichier audio ni transcription textuelle n'est enregistré sur disque ou conservé en base de données : le traitement s'effectue exclusivement en mémoire vive de façon éphémère. L'option de réutilisation des données pour l'entraînement des modèles d'intelligence artificielle est désactivée.</p>
     <p><strong>Stockage local</strong> — Vos favoris sont stockés exclusivement sur votre appareil via <em>Jetpack DataStore</em>.</p>
   </section>
@@ -94,6 +96,7 @@
       <br>
       Les compteurs de requêtes vocales associés au FID sont conservés pour la seule journée en cours afin de réguler l'accès (quota journalier), puis sont <strong>automatiquement et définitivement supprimés</strong> lors du cycle quotidien de nettoyage de la base de données.
     </div>
+    <p><strong>Rapports de plantage</strong> — Si vous avez activé leur partage, les rapports transmis à Firebase Crashlytics sont conservés par Google selon les durées décrites dans la <a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener">page de confidentialité Firebase</a>. Nextation ne les stocke pas dans son propre Backend.</p>
   </section>
 
   <section>
@@ -106,6 +109,7 @@
     <ul>
       <li><strong>Accès :</strong> vous pouvez retrouver votre Token FCM dans <span class="code">Paramètres → Informations techniques</span> de l'application.</li>
       <li><strong>Effacement :</strong> s'effectue par la suppression de l'alerte ou la désinstallation de l'application.</li>
+      <li><strong>Retrait du consentement (art. 7-3) :</strong> vous pouvez désactiver le partage des rapports de plantage à tout moment dans les paramètres de l'application. La désactivation de la collecte prend effet au prochain lancement ; l'application demande également la suppression des rapports non envoyés stockés localement. Le retrait n'affecte pas la licéité des traitements effectués avant celui-ci.</li>
       <li><strong>Contact :</strong> <a href="mailto:support@studio.bzh">support@studio.bzh</a>. Si vous ne disposez plus de votre Token FCM, nous ferons nos meilleurs efforts pour traiter votre demande via d'autres éléments techniques si possible. Toute demande sera traitée dans un délai maximal de 30 jours. Pour les demandes complexes, ce délai pourra être prolongé de 2 mois, avec information préalable de l'Utilisateur dans le délai initial d'un mois.</li>
     </ul>
   </section>
